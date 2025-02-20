@@ -69,3 +69,16 @@ Or
 ```bash
 make test:integration
 ```
+
+## References
+
+- [Hyperf](https://hyperf.io/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [GNU Make](https://www.gnu.org/software/make/)
+- [Sonar](https://www.sonarcloud.io/)
+
+## Related projects
+
+- [Swoole na Unha](https://github.com/ricardominze/swoolebootstrap)
+- [Super Quiz](https://github.com/PHPcomRapadura/quiz)
