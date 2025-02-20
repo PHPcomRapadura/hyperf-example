@@ -2,7 +2,7 @@
 
 ## Overview
 
-This integration allows you to interact with the RXMG API.
+This is a simple example of a project using the Hyperf framework.
 
 ## Getting Started
 
