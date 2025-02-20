@@ -1,0 +1,74 @@
+parameters:
+  paths:
+    - ./app
+  
+  layers:
+    - name: Application
+      collectors:
+        - type: className
+          regex: ^App\\Application.*
+    
+    - name: Domain
+      collectors:
+        - type: className
+          regex: ^App\\Domain.*
+    
+    - name: Infrastructure
+      collectors:
+        - type: className
+          regex: ^App\\Infrastructure.*
+    
+    - name: Presentation
+      collectors:
+        - type: className
+          regex: ^App\\Presentation.*
+    
+    - name: Contracts
+      collectors:
+        - type: className
+          regex: ^Psr\\.
+    
+    - name: Natives
+      collectors:
+        - type: className
+          regex: ^\w+$
+    
+    - name: Extensions
+      collectors:
+        - type: className
+          regex: ^(DS|Decimal)\\.*$
+    
+    - name: Vendor
+      collectors:
+        - type: bool
+          must:
+            - type: className
+              regex: .*
+          must_not:
+            - type: className
+              regex:
+                ^App\\Application.*|\
+                ^App\\Domain.*|\
+                ^App\\Infrastructure.*|\
+                ^App\\Presentation.*|\
+                ^Psr\\.|\
+                ^\w+$|\
+                ^(DS|Decimal)\\.*$|\
+                ^Hyperf\\.
+  
+  ruleset:
+    Application:
+      - Domain
+      - Natives
+    Domain:
+      - Natives
+      - Extensions
+    Infrastructure:
+      - Domain
+      - Contracts
+      - Natives
+      - Vendor
+    Presentation:
+      - Application
+      - Domain
+      - Infrastructure

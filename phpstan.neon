@@ -1,0 +1,28 @@
+# Magic behaviour with __get, __set, __call and __callStatic is not exactly static analyser-friendly :)
+# Fortunately, You can ingore it by the following config.
+#
+# vendor/bin/phpstan analyse app --memory-limit 200M -l 0
+#
+parameters:
+  level: 9
+  bootstrapFiles:
+    - config/constants.php
+  paths:
+    - config
+    - app
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    - '#Static call to instance method Hyperf\\HttpServer\\Router\\Router::[a-zA-Z0-9\\_]+\(\)#'
+    - '#Static call to instance method Hyperf\\DbConnection\\Db::[a-zA-Z0-9\\_]+\(\)#'
+    - '#Method [a-zA-Z0-9\\_\\:\(\)]+ has parameter \$[a-zA-Z0-9_]+ with no value type specified in iterable type array#'
+    - '#Method [a-zA-Z0-9\\_\\:\(\)]+ return type has no value type specified in iterable type array#'
+    - '#Property [a-zA-Z0-9\\_\\:\(\)]+ type has no value type specified in iterable type array#'
+    - '#is assigned outside of the constructor#'
+    - '#is not subtype of native type static#'
+    - '#Unsafe usage of new static#'
+    - identifier: missingType.generics
+  excludePaths:
+    - app/Infrastructure/Observability
+includes:
+  - vendor/phpstan/phpstan-mockery/extension.neon
+  - vendor/bnf/phpstan-psr-container/extension.neon
