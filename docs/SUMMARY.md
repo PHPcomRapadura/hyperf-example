@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Welcome](README.md)
+* [Bem-vindo](README.md)
 
 ## Getting Started
 
