@@ -20,7 +20,9 @@ layout:
 
 # Bem-vindo
 
-Este é um exemplo de documentação para um projeto que visa demonstrar para os desenvolvedores como é possível criar materiais que representem o que foi feito e ajude as pessoas a entenderem melhor o funcionamento do projeto
+Este é um exemplo de documentação para um projeto que visa demonstrar para os desenvolvedores como é possível criar materiais que representem o que foi feito e ajude as pessoas a entenderem melhor o funcionamento de um projeto.
+
+Neste material terão exemplos de implementação, configuração e publicação de uma aplicação, além de sugestões de organização de processos e ritos.
 
 ### Veja mais
 
