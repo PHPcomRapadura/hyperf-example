@@ -1,10 +1,10 @@
 # PHP com Rapadura Hyperf Example
 
-## Overview
+## 🍿 Overview
 
 This is a simple example of a project using the Hyperf framework.
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -44,7 +44,7 @@ Configure the environment variables in the your system if you want to use the `d
 export COMPOSE_RUNNER="docker compose"
 ```
 
-### Running the CI/CD pipeline
+## 🛠️ Running the CI/CD pipeline
 
 Execute the following command to run the CI/CD pipeline (this is not running SonarQube)
 
@@ -70,7 +70,7 @@ Or
 make test:integration
 ```
 
-## References
+## ✨ References
 
 - [Hyperf](https://hyperf.io/)
 - [Docker](https://www.docker.com/)
@@ -78,7 +78,7 @@ make test:integration
 - [GNU Make](https://www.gnu.org/software/make/)
 - [Sonar](https://www.sonarcloud.io/)
 
-## Related projects
+## 👋 Related projects
 
 - [Swoole na Unha](https://github.com/ricardominze/swoolebootstrap)
 - [Super Quiz](https://github.com/PHPcomRapadura/quiz)
