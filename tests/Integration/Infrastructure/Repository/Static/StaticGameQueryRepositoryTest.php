@@ -12,7 +12,7 @@ class StaticGameQueryRepositoryTest extends TestCase
 {
     public function testGetGamesReturnsGameCollection(): void
     {
-        $repository = new StaticGameQueryRepository();
+        $repository = $this->make(StaticGameQueryRepository::class);
         $leads = $repository->getGames();
 
         $this->assertCount(2, $leads);
@@ -20,7 +20,7 @@ class StaticGameQueryRepositoryTest extends TestCase
 
     public function testGetGamesContainsExpectedGames(): void
     {
-        $repository = new StaticGameQueryRepository();
+        $repository = $this->make(StaticGameQueryRepository::class);
         $leads = $repository->getGames()->all();
 
         $lead1 = new Game(name: 'Cool game 1', slug: 'cool-game-1');

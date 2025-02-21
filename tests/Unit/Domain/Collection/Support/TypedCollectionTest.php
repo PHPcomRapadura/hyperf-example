@@ -28,16 +28,9 @@ class TypedCollectionTest extends TestCase
         );
 
         $this->assertEquals(
-            [new TypedCollectionTestMockStub(), new TypedCollectionTestMockStub()],
+            ['data' => [new TypedCollectionTestMockStub(), new TypedCollectionTestMockStub()]],
             $collection->jsonSerialize()
         );
-    }
-
-    final public function testShouldFailOnNoJsonSerializableType(): void
-    {
-        $this->expectException(TypeError::class);
-
-        TypedCollectionTestMock::createFrom([new stdClass()]);
     }
 
     final public function testShouldFailOnNoEnforcedType(): void

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Input;
 
-use App\Infrastructure\Support\ActionInput;
+use App\Infrastructure\Support\Presentation\ActionInput;
 
 class GetGameBySlugActionInput extends ActionInput
 {

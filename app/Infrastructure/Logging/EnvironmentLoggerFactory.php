@@ -10,6 +10,7 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Psr\Log\LoggerInterface;
 
 use function Hyperf\Support\env;
+use function Util\Type\Cast\toString;
 
 class EnvironmentLoggerFactory
 {
@@ -38,6 +39,6 @@ class EnvironmentLoggerFactory
                 ],
             ];
         }
-        return $logging->psrLogger(env('APP_NAME'), $options);
+        return $logging->psrLogger(toString(env('APP_NAME')), $options);
     }
 }

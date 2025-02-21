@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Infrastructure\Support;
 
-use App\Infrastructure\Support\ActionInput;
+use App\Infrastructure\Support\Presentation\ActionInput;
 
 class ActionInputTestStub extends ActionInput
 {

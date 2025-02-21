@@ -6,12 +6,12 @@ namespace App\Domain\Entity;
 
 use App\Domain\Entity\Support\Entity;
 
-readonly class Game extends Entity
+class Game extends Entity
 {
     public function __construct(
-        public string $name,
-        public string $slug,
-        public array $data = [],
+        public readonly string $name,
+        public readonly string $slug,
+        public readonly array $data = [],
     ) {
     }
 }

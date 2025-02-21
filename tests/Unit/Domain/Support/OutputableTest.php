@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Domain\Entity\Support;
+namespace Tests\Unit\Domain\Support;
 
-use App\Domain\Entity\Support\Entity;
+use App\Domain\Support\Outputable;
 use Tests\TestCase;
 
-class EntityTest extends TestCase
+class OutputableTest extends TestCase
 {
     public function testJsonSerializeReturnsObjectVars(): void
     {
-        $entity = new readonly class extends Entity {
+        $entity = new class extends Outputable {
             public string $property1;
+
             public int $property2;
 
             public function __construct()
@@ -30,9 +31,9 @@ class EntityTest extends TestCase
         $this->assertEquals($expected, $entity->jsonSerialize());
     }
 
-    public function testJsonSerializeWithEmptyEntity(): void
+    public function testJsonSerializeWithEmptyOutputable(): void
     {
-        $entity = new readonly class extends Entity {
+        $entity = new class extends Outputable {
         };
 
         $this->assertEquals([], $entity->jsonSerialize());
@@ -40,8 +41,9 @@ class EntityTest extends TestCase
 
     public function testJsonSerializeWithNullProperties(): void
     {
-        $entity = new readonly class extends Entity {
+        $entity = new class extends Outputable {
             public ?string $property1;
+
             public ?int $property2;
         };
 
@@ -52,8 +54,9 @@ class EntityTest extends TestCase
 
     public function testToStringReturnsJsonString(): void
     {
-        $entity = new readonly class extends Entity {
+        $entity = new class extends Outputable {
             public string $property1;
+
             public int $property2;
 
             public function __construct()
@@ -65,12 +68,12 @@ class EntityTest extends TestCase
 
         $expected = '{"property1":"value1","property2":123}';
 
-        $this->assertEquals($expected, (string)$entity);
+        $this->assertEquals($expected, (string) $entity);
     }
 
     public function testToStringHandlesJsonException(): void
     {
-        $entity = new readonly class extends Entity {
+        $entity = new class extends Outputable {
             public mixed $property;
 
             public function __construct()

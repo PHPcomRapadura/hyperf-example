@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Collection\Support;
 
+use App\Domain\Support\Outputable;
 use Closure;
 use Countable;
 use Iterator;
 
-abstract class Collection implements Iterator, Countable
+abstract class Collection extends Outputable implements Iterator, Countable
 {
     private int $cursor = 0;
 

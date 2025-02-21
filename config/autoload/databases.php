@@ -3,82 +3,92 @@
 declare(strict_types=1);
 
 use function Hyperf\Support\env;
+use function Util\Type\Cast\toFloat;
 
 $connections = [
     'postgres' => [
         'driver' => 'pgsql',
         'read' => [
             'host' => [
-                env('DB_HOST_READER', env('DB_HOST')),
+                env('PGSQL_READ_DB_HOST', env('PGSQL_DB_HOST')),
             ],
-            'username' => env('DB_USERNAME_READER', env('DB_USERNAME', 'root')),
-            'password' => env('DB_PASSWORD_READER', env('DB_PASSWORD', '')),
+            'username' => env('PGSQL_READ_DB_USERNAME', env('PGSQL_DB_USERNAME', 'root')),
+            'password' => env('PGSQL_READ_DB_PASSWORD', env('PGSQL_DB_PASSWORD', 'root')),
+            'port' => env('PGSQL_READ_DB_PORT', env('PGSQL_DB_PORT', 5432)),
         ],
         'write' => [
             'host' => [
-                env('DB_HOST'),
+                env('PGSQL_DB_HOST'),
             ],
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'username' => env('PGSQL_DB_USERNAME', 'root'),
+            'password' => env('PGSQL_DB_PASSWORD', 'root'),
+            'port' => env('PGSQL_DB_PORT', 5432),
         ],
-        'port' => env('DB_PORT', 5432),
-        'database' => env('DB_DATABASE', 'hyperf-example'),
-        'charset' => env('DB_CHARSET', 'utf8'),
-        'collation' => env('DB_COLLATION', 'utf8_unicode_ci'),
-        'prefix' => env('DB_PREFIX', ''),
-        'schema' => env('POSTGRES_SCHEMA', 'public'),
+        'database' => env('PGSQL_DB_DATABASE', 'hyperf-example'),
+        'charset' => env('PGSQL_DB_CHARSET', 'utf8'),
+        'collation' => env('PGSQL_DB_COLLATION', 'utf8_unicode_ci'),
+        'prefix' => env('PGSQL_DB_PREFIX', ''),
+        'schema' => env('PGSQL_DB_SCHEMA', 'public'),
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 30,
             'connect_timeout' => 10.0,
             'wait_timeout' => 3.0,
             'heartbeat' => -1,
-            'max_idle_time' => (float) env('DB_MAX_IDLE_TIME', 60),
+            'max_idle_time' => toFloat(env('PGSQL_DB_MAX_IDLE_TIME', 60)),
         ],
         'options' => [
             PDO::ATTR_TIMEOUT => 5,
+            PDO::ATTR_CASE => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+            PDO::ATTR_STRINGIFY_FETCHES => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ],
     ],
     'mysql' => [
         'driver' => 'mysql',
         'read' => [
             'host' => [
-                env('MY_SQL_DB_HOST_READER', 'mysql'),
+                env('MYSQL_READ_DB_HOST', env('MYSQL_DB_HOST')),
             ],
-            'username' => env('MY_SQL_DB_USERNAME_READER', 'root'),
-            'password' => env('MY_SQL_DB_PASSWORD_READER', 'root'),
-            'port' => env('MY_SQL_DB_PORT_READER', 3306),
+            'username' => env('MYSQL_READ_DB_USERNAME', env('MYSQL_DB_USERNAME', 'root')),
+            'password' => env('MYSQL_READ_DB_PASSWORD', env('MYSQL_DB_PASSWORD', 'root')),
+            'port' => env('MYSQL_READ_DB_PORT', env('MYSQL_DB_PORT', 3306)),
         ],
         'write' => [
             'host' => [
-                env('MY_SQL_DB_HOST_WRITE', 'mysql'),
+                env('MYSQL_DB_HOST', 'mysql'),
             ],
-            'username' => env('MY_SQL_DB_USERNAME_WRITE', 'root'),
-            'password' => env('MY_SQL_DB_PASSWORD_WRITE', 'root'),
-            'port' => env('MY_SQL_DB_PORT_WRITE', 3306),
+            'username' => env('MYSQL_DB_USERNAME', 'root'),
+            'password' => env('MYSQL_DB_PASSWORD', 'root'),
+            'port' => env('MYSQL_DB_PORT', 3306),
         ],
-        'database' => env('DB_DATABASE', 'hyperf-example'),
-        'port' => env('MY_SQL_DB_PORT_READER', 3306),
-        'charset' => env('DB_CHARSET', 'utf8'),
-        'collation' => env('DB_COLLATION', 'utf8_unicode_ci'),
-        'prefix' => env('DB_PREFIX', ''),
+        'database' => env('MYSQL_DB_DATABASE', 'hyperf-example'),
+        'charset' => env('MYSQL_DB_CHARSET', 'utf8'),
+        'collation' => env('MYSQL_DB_COLLATION', 'utf8_unicode_ci'),
+        'prefix' => env('MYSQL_DB_PREFIX', ''),
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 30,
             'connect_timeout' => 10.0,
             'wait_timeout' => 3.0,
             'heartbeat' => -1,
-            'max_idle_time' => (float) env('DB_MAX_IDLE_TIME', 60),
+            'max_idle_time' => toFloat(env('MYSQL_DB_MAX_IDLE_TIME', 60)),
         ],
         'options' => [
             PDO::ATTR_TIMEOUT => 5,
+            PDO::ATTR_CASE => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+            PDO::ATTR_STRINGIFY_FETCHES => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ],
     ],
 ];
 
 $connection = env('DB_CONNECTION', 'postgres');
 return [
-    'default' => $connection[$connection],
-    'connections' => $connections,
-    'connection' => $connection,
+    'default' => $connections[$connection],
+    ...$connections,
 ];

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Middleware;
 
-use App\Infrastructure\Support\OutputFormatter;
+use App\Infrastructure\Support\Presentation\OutputFormatter;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

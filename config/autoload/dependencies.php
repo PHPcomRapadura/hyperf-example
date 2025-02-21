@@ -9,10 +9,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 use function Hyperf\Support\env;
+use function Util\Type\Cast\toString;
 
 return [
     LoggerInterface::class => static function (ContainerInterface $container) {
-        return $container->get(EnvironmentLoggerFactory::class)->make(env('APP_ENV'));
+        return $container->get(EnvironmentLoggerFactory::class)->make(toString(env('APP_ENV')));
     },
     GameQueryRepository::class => StaticGameQueryRepository::class,
 ];

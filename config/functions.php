@@ -6,7 +6,7 @@ namespace Util\Type\Cast;
 
 if (! function_exists('toArray')) {
     /**
-     * @template T
+     * @template T of array-key
      * @template U
      * @param mixed $value
      * @param array<T, U> $default
@@ -32,6 +32,13 @@ if (! function_exists('toInt')) {
     }
 }
 
+if (! function_exists('toFloat')) {
+    function toFloat(mixed $value, float $default = 0.0): float
+    {
+        return is_float($value) ? $value : $default;
+    }
+}
+
 if (! function_exists('toBool')) {
     function toBool(mixed $value, bool $default = false): bool
     {
@@ -45,7 +52,7 @@ if (! function_exists('extractArray')) {
     /**
      * @template T
      * @template U
-     * @param array<string, mixed> $array
+     * @param array<string, array<T, U>> $array
      * @param string $property
      * @param array<T, U> $default
      * @return array<T, U>

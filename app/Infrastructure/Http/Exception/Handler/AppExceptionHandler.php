@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Exception\Handler;
 
-use App\Infrastructure\Support\OutputFormatter;
+use App\Infrastructure\Support\Presentation\OutputFormatter;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Psr\Http\Message\MessageInterface;

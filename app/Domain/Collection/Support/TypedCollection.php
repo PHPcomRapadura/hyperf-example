@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Collection\Support;
 
 use DomainException;
-use JsonSerializable;
 
-abstract class TypedCollection extends Collection implements JsonSerializable
+abstract class TypedCollection extends Collection
 {
     final protected function __construct()
     {
@@ -23,12 +22,7 @@ abstract class TypedCollection extends Collection implements JsonSerializable
         return $collection;
     }
 
-    public function jsonSerialize(): array
-    {
-        return $this->data();
-    }
-
-    final protected function push(JsonSerializable $datum): static
+    final protected function push(mixed $datum): static
     {
         $this->data[] = $this->enforce($datum);
         return $this;

@@ -6,8 +6,9 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Psr\Log\LogLevel;
 
 use function Hyperf\Support\env;
+use function Util\Type\Cast\toString;
 
-$logLevel = env('STDOUT_LOG_LEVEL');
+$logLevel = toString(env('STDOUT_LOG_LEVEL'));
 
 return [
     'app_name' => env('APP_NAME', 'skeleton'),
@@ -16,7 +17,7 @@ return [
     'scan_cacheable' => env('SCAN_CACHEABLE', false),
     StdoutLoggerInterface::class => [
         'log_level' => $logLevel
-            ? explode(',', (string) $logLevel)
+            ? explode(',', $logLevel)
             : [
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,

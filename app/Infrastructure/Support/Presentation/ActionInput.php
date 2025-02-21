@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Support;
+namespace App\Infrastructure\Support\Presentation;
 
 use Hyperf\Validation\Request\FormRequest;
 use Psr\Container\ContainerInterface;
