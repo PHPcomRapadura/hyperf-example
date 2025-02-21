@@ -2,10 +2,10 @@
 
 * [Bem-vindo](README.md)
 
-## Getting Started
+## Começando do começo
 
-* [Quickstart](getting-started/quickstart.md)
-* [Publish your docs](getting-started/publish-your-docs.md)
+* [Bora já então](comecando-do-comeco/quickstart.md)
+* [Publish your docs](comecando-do-comeco/publish-your-docs.md)
 
 ## Basics
 

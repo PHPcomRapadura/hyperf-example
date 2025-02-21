@@ -2,7 +2,9 @@
 icon: bullseye-arrow
 ---
 
-# Quickstart
+# Bora já então
+
+Existe uma palavra chamada contexto que é muito boa para expressar um conjunto de conhecimentos que não são comuns e que podem ser de domínio de apenas uma pessoa ou grupo. Ao criar uma funcionalidade ou até mesmo um projeto as pessoas envolvidas naquela demanda terão contexto suficiente para executá-la e entregá-la, porém em algum momento pode ser preciso que outras pessoas atuem no mesmo cenário e sem o contexto descrito em algum lugar será mais complicado ter todos os detalhes de volta.
 
 <figure><img src="https://gitbookio.github.io/onboarding-template-images/quickstart-hero.png" alt=""><figcaption></figcaption></figure>
 
