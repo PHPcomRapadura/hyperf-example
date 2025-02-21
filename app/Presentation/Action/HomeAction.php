@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Presentation\Action;
 
-use App\Infrastructure\Support\Input;
+use App\Presentation\Input\HomeActionInput;
 
 readonly class HomeAction
 {
-    public function __invoke(Input $request): array
+    public function __invoke(HomeActionInput $input): array
     {
         return [
-            'method' => $request->getMethod(),
-            'message' => $request->input('message', 'Kicking ass and taking names!'),
+            'method' => $input->getMethod(),
+            'message' => $input->value('message', 'Kicking ass and taking names!'),
         ];
     }
 }

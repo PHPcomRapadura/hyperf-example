@@ -7,9 +7,7 @@ namespace App\Presentation\Action;
 use App\Application\Service\RecoverGameService;
 use App\Domain\Entity\Game;
 use App\Domain\Exception\GameNotFoundException;
-use App\Presentation\Input\GetGameBySlugInput;
-
-use function Util\Type\Cast\toString;
+use App\Presentation\Input\GetGameBySlugActionInput;
 
 readonly class GetGamedBySlugAction
 {
@@ -20,9 +18,9 @@ readonly class GetGamedBySlugAction
     /**
      * @throws GameNotFoundException
      */
-    public function __invoke(GetGameBySlugInput $getGameBySlugInput): Game
+    public function __invoke(GetGameBySlugActionInput $input): Game
     {
-        $sms = toString($getGameBySlugInput->route('slug'));
-        return $this->recoverGameService->getGameBySlug($sms);
+        $slug = $input->value('slug', '');
+        return $this->recoverGameService->getGameBySlug($slug);
     }
 }

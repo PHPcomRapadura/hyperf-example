@@ -8,7 +8,7 @@ use App\Domain\Collection\GameCollection;
 use App\Domain\Entity\Game;
 use App\Domain\Repository\GameQueryRepository;
 
-class MemoryGameQueryRepository implements GameQueryRepository
+class StaticGameQueryRepository implements GameQueryRepository
 {
     public function getGames(): GameCollection
     {

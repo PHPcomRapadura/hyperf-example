@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Infrastructure\Repository\Memory;
+namespace Tests\Unit\Infrastructure\Repository\Static;
 
 use App\Domain\Entity\Game;
-use App\Infrastructure\Repository\Memory\MemoryGameQueryRepository;
+use App\Infrastructure\Repository\Memory\StaticGameQueryRepository;
 use Tests\TestCase;
 
-class MemoryGameQueryRepositoryTest extends TestCase
+class StaticGameQueryRepositoryTest extends TestCase
 {
     public function testGetGamesReturnsGameCollection(): void
     {
-        $repository = new MemoryGameQueryRepository();
+        $repository = new StaticGameQueryRepository();
         $leads = $repository->getGames();
 
         $this->assertCount(2, $leads);
@@ -20,7 +20,7 @@ class MemoryGameQueryRepositoryTest extends TestCase
 
     public function testGetGamesContainsExpectedGames(): void
     {
-        $repository = new MemoryGameQueryRepository();
+        $repository = new StaticGameQueryRepository();
         $leads = $repository->getGames()->all();
 
         $lead1 = new Game(name: 'Cool game 1', slug: 'cool-game-1');
