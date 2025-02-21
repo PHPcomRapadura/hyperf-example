@@ -12,15 +12,9 @@ class OutputableTest extends TestCase
     public function testJsonSerializeReturnsObjectVars(): void
     {
         $entity = new class extends Outputable {
-            public string $property1;
+            public string $property1 = 'value1';
 
-            public int $property2;
-
-            public function __construct()
-            {
-                $this->property1 = 'value1';
-                $this->property2 = 123;
-            }
+            public int $property2 = 123;
         };
 
         $expected = [
@@ -42,9 +36,9 @@ class OutputableTest extends TestCase
     public function testJsonSerializeWithNullProperties(): void
     {
         $entity = new class extends Outputable {
-            public ?string $property1;
+            public ?string $property1 = null;
 
-            public ?int $property2;
+            public ?int $property2 = null;
         };
 
         $expected = [];
@@ -55,15 +49,9 @@ class OutputableTest extends TestCase
     public function testToStringReturnsJsonString(): void
     {
         $entity = new class extends Outputable {
-            public string $property1;
+            public string $property1 = 'value1';
 
-            public int $property2;
-
-            public function __construct()
-            {
-                $this->property1 = 'value1';
-                $this->property2 = 123;
-            }
+            public int $property2 = 123;
         };
 
         $expected = '{"property1":"value1","property2":123}';
