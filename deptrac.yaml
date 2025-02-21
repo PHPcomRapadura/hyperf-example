@@ -25,12 +25,12 @@ parameters:
           regex: ^App\\Presentation.*
 
     # Define the supported global layers
-    - name: Contracts
+    - name: Contract
       collectors:
         - type: className
           regex: ^Hyperf\\Contract\\.*
 
-    - name: Natives
+    - name: Native
       collectors:
         - type: className
           regex: ^\w+$|^(DS|Decimal)\\.*$
@@ -42,7 +42,7 @@ parameters:
             ^Psr\\(Http|Log)\\.*|\
             ^Hyperf\\(Event|Command|Coordinator|HttpMessage|ExceptionHandler)\\.*|\
             ^Google\\.*|\
-            ^Swow\\Psr7\\.*
+            ^Swow\\.*
 
     - name: Validation
       collectors:
@@ -55,14 +55,14 @@ parameters:
   ruleset:
     Application:
       - Domain
-      - Natives
+      - Native
     Domain:
-      - Contracts
-      - Natives
+      - Contract
+      - Native
     Infrastructure:
       - Domain
-      - Contracts
-      - Natives
+      - Contract
+      - Native
       - Vendor
       - Validation
     Presentation:

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Infrastructure\Repository\Static;
+namespace Tests\Integration\Infrastructure\Repository\Static;
 
 use App\Domain\Entity\Game;
 use App\Infrastructure\Repository\Memory\StaticGameQueryRepository;
