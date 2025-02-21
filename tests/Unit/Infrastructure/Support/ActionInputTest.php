@@ -48,6 +48,12 @@ class ActionInputTest extends TestCase
         $this->assertEquals('cool', $input->post('test'));
     }
 
+    final public function testShouldCallValuesBehindPost(): void
+    {
+        $input = $this->make(ActionInputTestStub::class, ['values' => ['test' => 'cool']]);
+        $this->assertEquals(['test' => 'cool'], $input->post());
+    }
+
     final public function testShouldCallValueBehindInput(): void
     {
         $input = $this->make(ActionInputTestStub::class, ['values' => ['test' => 'cool']]);

@@ -102,7 +102,7 @@
     "test": "bin/phpunit.php",
     "lint:phpcs": "phpcs --standard=PSR12,phpcs.xml -s app",
     "lint:phpstan": "phpstan analyse --memory-limit 512M",
-    "lint:deptrac": "deptrac analyse",
+    "lint:deptrac": "deptrac analyse --fail-on-uncovered",
     "lint:phpmd": "phpmd app ansi phpmd.xml",
     "lint:rector": "rector --dry-run",
     "lint": [

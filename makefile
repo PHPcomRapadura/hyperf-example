@@ -29,8 +29,23 @@ dump: ## Run the composer dump
 
 ##@ Code analysis
 
-lint: ## Perform code style fix
+lint: ## Perform code style lint
 	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint
+
+lint-phpcs: ## Perform code style list using phpcs
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:phpcs
+
+lint-phpstan: ## Perform code style list using phpstan
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:phpstan
+
+lint-deptrac: ## Perform code style list using deptrac
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:deptrac
+
+lint-phpmd: ## Perform code style list using phpmd
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:phpmd
+
+lint-rector: ## Perform code style list using rector
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:rector
 
 fix: ## Perform code style fix
 	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app fix
