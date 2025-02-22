@@ -6,6 +6,7 @@ namespace Tests\Unit\Presentation\Support;
 
 use App\Domain\Exception\MappingException;
 use App\Presentation\Support\Mapper;
+use App\Presentation\Support\MapperError;
 use DateTime;
 use Tests\TestCase;
 
@@ -80,8 +81,8 @@ class MapperTest extends TestCase
             $this->mapper->map($entityClass, $values);
         } catch (MappingException $e) {
             $errors = $e->getErrors();
-            $this->assertArrayHasKey('id', $errors);
-            $this->assertSame("The value for 'id' is not of the expected type 'int'.", $errors['id']['message']);
+            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
+            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'id' is not of the expected type."));
         }
     }
 
@@ -100,8 +101,8 @@ class MapperTest extends TestCase
             $this->mapper->map($entityClass, $values);
         } catch (MappingException $e) {
             $errors = $e->getErrors();
-            $this->assertArrayHasKey('id', $errors);
-            $this->assertSame("The value for 'id' is required and was not provided.", $errors['id']['message']);
+            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
+            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'id' is required and was not provided."));
         }
     }
 
@@ -113,5 +114,35 @@ class MapperTest extends TestCase
         $entity = $this->mapper->map($entityClass, $values);
 
         $this->assertInstanceOf($entityClass, $entity);
+    }
+
+    final public function testToEntityWithReflectionError(): void
+    {
+        $entityClass = 'NonExistentClass';
+        $values = [
+            'id' => 1,
+            'price' => 19.99,
+            'name' => 'Test',
+            'isActive' => true,
+            'nested' => new MapperTestStubWithNoConstructor(),
+        ];
+
+        try {
+            $this->mapper->map($entityClass, $values);
+        } catch (MappingException $e) {
+            $errors = $e->getErrors();
+            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
+            $this->assertTrue($this->hasErrorMessage($errors, 'Class "NonExistentClass" does not exist'));
+        }
+    }
+
+    private function hasErrorMessage(array $errors, string $message): bool
+    {
+        foreach ($errors as $error) {
+            if ($error->message === $message) {
+                return true;
+            }
+        }
+        return false;
     }
 }

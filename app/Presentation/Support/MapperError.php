@@ -12,11 +12,12 @@ class MapperError
         public readonly string $kind,
         public readonly mixed $value = null,
         public readonly string $field = '',
+        string $message = '',
     ) {
         $this->message = match ($kind) {
             'required' => sprintf("The value for '%s' is required and was not provided.", $field),
             'invalid' => sprintf("The value for '%s' is not of the expected type.", $field),
-            default => $kind,
+            default => $message,
         };
     }
 }

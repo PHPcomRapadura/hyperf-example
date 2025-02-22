@@ -31,10 +31,47 @@ class Mapper
             $errors = $resolution;
         } catch (Throwable $e) {
             $errors = [
-                new MapperError($e->getMessage(), $class),
+                new MapperError(kind: 'panic', value: $class, message: $e->getMessage()),
             ];
         }
         throw new MappingException($values, $errors);
+    }
+
+    /**
+     * @template T of mixed
+     * @param class-string<T> $class
+     * @param array<string, mixed> $values
+     *
+     * @return array<string, array>|T
+     * @throws ReflectionException
+     */
+    private function resolve(string $class, array $values): mixed
+    {
+        $errors = [];
+        $reflectionClass = new ReflectionClass($class);
+        $constructor = $reflectionClass->getConstructor();
+
+        if ($constructor === null) {
+            return new $class();
+        }
+
+        $args = [];
+        $parameters = $constructor->getParameters();
+        foreach ($parameters as $parameter) {
+            try {
+                $args[] = $this->resolveParameter($parameter, $values);
+            } catch (InvalidArgumentException $e) {
+                $errors[] = new MapperError(
+                    $e->getMessage(),
+                    $values[$parameter->getName()] ?? null,
+                    $parameter->getName(),
+                );
+            }
+        }
+        if (empty($errors)) {
+            return $reflectionClass->newInstanceArgs($args);
+        }
+        return $errors;
     }
 
     /**
@@ -89,42 +126,5 @@ class Mapper
         };
 
         return $actual === $expected || ($type === 'object' && $value instanceof $expected);
-    }
-
-    /**
-     * @template T of mixed
-     * @param class-string<T> $class
-     * @param array<string, mixed> $values
-     *
-     * @return array<string, array>|T
-     * @throws ReflectionException
-     */
-    private function resolve(string $class, array $values): mixed
-    {
-        $errors = [];
-        $reflectionClass = new ReflectionClass($class);
-        $constructor = $reflectionClass->getConstructor();
-
-        if ($constructor === null) {
-            return new $class();
-        }
-
-        $args = [];
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $parameter) {
-            try {
-                $args[] = $this->resolveParameter($parameter, $values);
-            } catch (InvalidArgumentException $e) {
-                $errors[] = new MapperError(
-                    $e->getMessage(),
-                    $values[$parameter->getName()] ?? null,
-                    $parameter->getName(),
-                );
-            }
-        }
-        if (empty($errors)) {
-            return $reflectionClass->newInstanceArgs($args);
-        }
-        return $errors;
     }
 }

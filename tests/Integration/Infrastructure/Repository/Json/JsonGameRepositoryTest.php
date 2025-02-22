@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration\Infrastructure\Repository\Static;
+namespace Tests\Integration\Infrastructure\Repository\Json;
 
 use App\Domain\Entity\Game;
-use App\Infrastructure\Repository\Memory\JsonGameRepository;
+use App\Infrastructure\Repository\Json\JsonGameRepository;
 use Tests\TestCase;
 
 class JsonGameRepositoryTest extends TestCase

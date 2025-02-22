@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Repository\Memory;
+namespace App\Infrastructure\Repository\Json;
 
 use App\Domain\Collection\GameCollection;
 use App\Domain\Entity\Game;

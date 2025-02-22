@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Domain\Repository\GameRepository;
-use App\Infrastructure\Repository\Memory\JsonGameRepository;
+use App\Infrastructure\Repository\Json\JsonGameRepository;
 use App\Infrastructure\Support\Logging\EnvironmentLoggerFactory;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;

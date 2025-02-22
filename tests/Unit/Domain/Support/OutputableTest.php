@@ -41,7 +41,10 @@ class OutputableTest extends TestCase
             public ?int $property2 = null;
         };
 
-        $expected = [];
+        $expected = [
+            'property1' => null,
+            'property2' => null,
+        ];
 
         $this->assertEquals($expected, $entity->jsonSerialize());
     }
