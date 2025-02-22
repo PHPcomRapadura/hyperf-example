@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Collection\Support;
 
+use DomainException;
 use JsonSerializable;
 use Tests\TestCase;
-use TypeError;
 
 class TypedCollectionTest extends TestCase
 {
@@ -33,7 +33,7 @@ class TypedCollectionTest extends TestCase
 
     final public function testShouldFailOnCurrentInvalidType(): void
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(DomainException::class);
 
         $invalid = new class implements JsonSerializable {
             public function jsonSerialize(): array

@@ -10,11 +10,6 @@ final class TypedCollectionTestMock extends TypedCollection
 {
     public function current(): TypedCollectionTestMockStub
     {
-        return $this->datum();
-    }
-
-    protected function type(): string
-    {
-        return TypedCollectionTestMockStub::class;
+        return $this->validate(TypedCollectionTestMockStub::class, $this->datum());
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Infrastructure\Support;
+namespace Tests\Unit\Infrastructure\Support\Presentation;
 
 use App\Infrastructure\Support\Presentation\OutputFormatter;
 use Tests\TestCase;

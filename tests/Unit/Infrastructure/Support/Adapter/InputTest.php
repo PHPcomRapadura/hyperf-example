@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Infrastructure\Support;
+namespace Tests\Unit\Infrastructure\Support\Adapter;
 
 use Tests\TestCase;
 
-class ActionInputTest extends TestCase
+class InputTest extends TestCase
 {
     final public function testShouldAuthorize(): void
     {
