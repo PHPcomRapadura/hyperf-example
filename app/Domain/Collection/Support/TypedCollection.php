@@ -21,7 +21,7 @@ abstract class TypedCollection extends Collection
     /**
      * @param array $data
      * @param Serializer|null $serializable
-     * @return TypedCollection<T>
+     * @return static<T>
      */
     final public static function createFrom(array $data, ?Serializer $serializable = null): static
     {
