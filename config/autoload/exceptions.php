@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Infrastructure\Http\Exception\Handler\AppExceptionHandler;
-use App\Infrastructure\Http\Exception\Handler\ValidationExceptionHandler;
+use App\Infrastructure\Support\Http\Exception\Handler\AppExceptionHandler;
+use App\Infrastructure\Support\Http\Exception\Handler\ValidationExceptionHandler;
 use Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler;
 
 return [

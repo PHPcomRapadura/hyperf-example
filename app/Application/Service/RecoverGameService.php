@@ -6,11 +6,11 @@ namespace App\Application\Service;
 
 use App\Domain\Entity\Game;
 use App\Domain\Exception\GameNotFoundException;
-use App\Domain\Repository\GameQueryRepository;
+use App\Domain\Repository\GameRepository;
 
 class RecoverGameService
 {
-    public function __construct(private readonly GameQueryRepository $gameQueryRepository)
+    public function __construct(private readonly GameRepository $gameQueryRepository)
     {
     }
 

@@ -8,7 +8,7 @@ use App\Application\Service\RecoverGameService;
 use App\Domain\Collection\GameCollection;
 use App\Domain\Entity\Game;
 use App\Domain\Exception\GameNotFoundException;
-use App\Domain\Repository\GameQueryRepository;
+use App\Domain\Repository\GameRepository;
 use Tests\TestCase;
 
 class RecoverGameServiceTest extends TestCase
@@ -17,7 +17,7 @@ class RecoverGameServiceTest extends TestCase
     {
         $this->expectException(GameNotFoundException::class);
 
-        $leadQueryRepository = $this->createMock(GameQueryRepository::class);
+        $leadQueryRepository = $this->createMock(GameRepository::class);
         $leadQueryRepository->expects($this->once())
             ->method('getGames')
             ->willReturn(GameCollection::createFrom([]));
@@ -30,7 +30,7 @@ class RecoverGameServiceTest extends TestCase
     {
         $lead = new Game(name: 'Cool game', slug: 'cool-game');
 
-        $leadQueryRepository = $this->createMock(GameQueryRepository::class);
+        $leadQueryRepository = $this->createMock(GameRepository::class);
         $leadQueryRepository->expects($this->once())
             ->method('getGames')
             ->willReturn(GameCollection::createFrom([$lead]));
@@ -47,7 +47,7 @@ class RecoverGameServiceTest extends TestCase
 
         $lead = new Game(name: 'Cool game', slug: 'nope');
 
-        $leadQueryRepository = $this->createMock(GameQueryRepository::class);
+        $leadQueryRepository = $this->createMock(GameRepository::class);
         $leadQueryRepository->expects($this->once())
             ->method('getGames')
             ->willReturn(GameCollection::createFrom([$lead]));
