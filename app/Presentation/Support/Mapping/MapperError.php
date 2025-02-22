@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Support;
+namespace App\Presentation\Support\Mapping;
 
 class MapperError
 {

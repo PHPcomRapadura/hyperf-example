@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Presentation\Support;
 
 use App\Domain\Exception\MappingException;
-use App\Presentation\Support\Mapper;
-use App\Presentation\Support\MapperError;
+use App\Presentation\Support\Mapping\Mapper;
+use App\Presentation\Support\Mapping\MapperError;
 use DateTime;
 use Tests\TestCase;
 

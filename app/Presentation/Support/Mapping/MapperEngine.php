@@ -2,41 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Support;
+namespace App\Presentation\Support\Mapping;
 
-use App\Domain\Exception\MappingException;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
-use Throwable;
 
-class Mapper
+use function App\Presentation\Support\gettype;
+
+abstract class MapperEngine
 {
-    /**
-     * @template T of mixed
-     * @param class-string<T> $class
-     * @param array<string, mixed> $values
-     *
-     * @return T
-     * @throws MappingException
-     */
-    public function map(string $class, array $values): mixed
-    {
-        try {
-            $resolution = $this->resolve($class, $values);
-            if (is_object($resolution)) {
-                return $resolution;
-            }
-            $errors = $resolution;
-        } catch (Throwable $e) {
-            $errors = [
-                new MapperError(kind: 'panic', value: $class, message: $e->getMessage()),
-            ];
-        }
-        throw new MappingException($values, $errors);
-    }
-
     /**
      * @template T of mixed
      * @param class-string<T> $class
@@ -45,7 +21,7 @@ class Mapper
      * @return array<string, array>|T
      * @throws ReflectionException
      */
-    private function resolve(string $class, array $values): mixed
+    protected function resolve(string $class, array $values): mixed
     {
         $errors = [];
         $reflectionClass = new ReflectionClass($class);
