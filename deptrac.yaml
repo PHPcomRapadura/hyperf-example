@@ -37,18 +37,31 @@ parameters:
 
     - name: Vendor
       collectors:
-        - type: className
-          regex:
-            ^Psr\\(Http|Log)\\.*|\
-            ^Hyperf\\(Event|Command|Coordinator|HttpMessage|ExceptionHandler)\\.*|\
-            ^Google\\.*|\
-            ^Swow\\.*
+        - type: bool
+          must:
+            - type: className
+              regex:
+                ^Psr\\(Http|Log|Container)\\.*|\
+                ^Hyperf\\(Event|Command|Coordinator|HttpMessage|Context|ExceptionHandler)\\.*|\
+                ^Google\\.*|\
+                ^SleekDB\\.*|\
+                ^Swow\\.*
+          must_not:
+            - type: className
+              regex:
+                ^Psr\\Container\\ContainerInterface$|\
+                ^Psr\\Http\\Message\\ServerRequestInterface$|\
+                ^Hyperf\\Context\\Context$|\
+                ^Hyperf\\Validation\\ValidationException$|\
+                ^Hyperf\\Validation\\Request\\FormRequest$
 
     - name: Validation
       collectors:
         - type: className
           regex:
             ^Psr\\Container\\ContainerInterface$|\
+            ^Psr\\Http\\Message\\ServerRequestInterface$|\
+            ^Hyperf\\Context\\Context$|\
             ^Hyperf\\Validation\\ValidationException$|\
             ^Hyperf\\Validation\\Request\\FormRequest$
 

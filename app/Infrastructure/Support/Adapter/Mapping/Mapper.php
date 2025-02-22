@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Support\Mapping;
+namespace App\Infrastructure\Support\Adapter\Mapping;
 
 use App\Domain\Exception\MappingException;
-use App\Infrastructure\Support\Inputting\Values;
+use App\Domain\Exception\MappingExceptionItem;
+use App\Domain\Support\Values;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -40,7 +41,7 @@ class Mapper extends MapperEngine
             throw $e;
         } catch (Throwable $e) {
             $errors = [
-                new MapperError(kind: 'panic', value: $class, message: $e->getMessage()),
+                new MappingExceptionItem(kind: 'panic', value: $class, message: $e->getMessage()),
             ];
             throw new MappingException($values, $errors);
         }
@@ -90,7 +91,7 @@ class Mapper extends MapperEngine
             try {
                 $args[] = $this->resolveArgsParameter($parameter, $values);
             } catch (InvalidArgumentException $e) {
-                $errors[] = new MapperError(
+                $errors[] = new MappingExceptionItem(
                     $e->getMessage(),
                     $values->get($parameter->getName()),
                     $parameter->getName(),

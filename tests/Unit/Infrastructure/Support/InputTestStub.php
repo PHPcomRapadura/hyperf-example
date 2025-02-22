@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Infrastructure\Support;
 
-use App\Infrastructure\Support\Inputting\Input;
+use App\Infrastructure\Support\Adapter\Input;
 
 class InputTestStub extends Input
 {

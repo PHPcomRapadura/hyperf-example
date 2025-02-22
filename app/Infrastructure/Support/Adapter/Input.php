@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Support\Inputting;
+namespace App\Infrastructure\Support\Adapter;
 
+use App\Domain\Support\Values;
+use Hyperf\Context\Context;
 use Hyperf\Validation\Request\FormRequest;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 use function Hyperf\Collection\data_get;
 
@@ -14,11 +17,15 @@ use function Hyperf\Collection\data_get;
  */
 abstract class Input extends FormRequest
 {
+    private readonly Values $values;
+
     public function __construct(
         ContainerInterface $container,
-        private ?array $values = null,
+        array $values = [],
     ) {
         parent::__construct($container);
+
+        $this->values = Values::createFrom($values);
     }
 
     public function authorize(): bool
@@ -40,7 +47,7 @@ abstract class Input extends FormRequest
     public function post(?string $key = null, mixed $default = null): mixed
     {
         if (! $key) {
-            return $this->values();
+            return $this->values()->copy();
         }
         return $this->value($key, $default);
     }
@@ -53,13 +60,13 @@ abstract class Input extends FormRequest
      */
     final public function value(string $key, mixed $default = null): mixed
     {
-        return data_get($this->values(), $key, $default);
+        return data_get($this->values()->copy(), $key, $default);
     }
 
-    final public function values(): array
+    final public function values(): Values
     {
-        if (! $this->values) {
-            $this->values = $this->validated();
+        if (Context::has(ServerRequestInterface::class)) {
+            return $this->values->along($this->validated());
         }
         return $this->values;
     }

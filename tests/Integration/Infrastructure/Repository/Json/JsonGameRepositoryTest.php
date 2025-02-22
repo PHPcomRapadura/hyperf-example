@@ -4,29 +4,46 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Infrastructure\Repository\Json;
 
-use App\Domain\Entity\Game;
 use App\Infrastructure\Repository\Json\JsonGameRepository;
-use Tests\TestCase;
+use Tests\Integration\IntegrationTestCase;
 
-class JsonGameRepositoryTest extends TestCase
+use function Hyperf\Collection\collect;
+
+class JsonGameRepositoryTest extends IntegrationTestCase
 {
+    protected array $truncate = ['games' => 'sleek'];
+
     public function testGetGamesReturnsGameCollection(): void
     {
-        $repository = $this->make(JsonGameRepository::class);
-        $leads = $repository->getGames();
+        $this->sleek->seed('games', [
+            'name' => 'cool-game-1',
+            'slug' => 'Cool game 1',
+            'data' => [],
+        ]);
+        $this->sleek->seed('games', [
+            'name' => 'cool-game-2',
+            'slug' => 'Cool game 2',
+            'data' => [],
+        ]);
 
-        $this->assertCount(2, $leads);
+        $repository = $this->make(JsonGameRepository::class);
+        $games = $repository->getGames();
+
+        $this->assertCount(2, $games);
     }
 
     public function testGetGamesContainsExpectedGames(): void
     {
+        $this->sleek->seed('games', [
+            'name' => 'cool-game-3',
+            'slug' => 'Cool game 3',
+            'data' => [],
+        ]);
+
         $repository = $this->make(JsonGameRepository::class);
-        $leads = $repository->getGames()->all();
-
-        $lead1 = new Game(name: 'Cool game 1', slug: 'cool-game-1');
-        $lead2 = new Game(name: 'Cool game 2', slug: 'cool-game-2');
-
-        $this->assertEquals($lead1, $leads[0]);
-        $this->assertEquals($lead2, $leads[1]);
+        $count = collect($repository->getGames()->all())
+            ->filter(fn ($game) => $game->name === 'cool-game-3')
+            ->count();
+        $this->assertEquals(1, $count);
     }
 }

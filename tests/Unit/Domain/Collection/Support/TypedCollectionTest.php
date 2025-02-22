@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domain\Collection\Support;
 
-use DomainException;
 use JsonSerializable;
-use stdClass;
 use Tests\TestCase;
 use TypeError;
 
@@ -33,9 +31,9 @@ class TypedCollectionTest extends TestCase
         );
     }
 
-    final public function testShouldFailOnNoEnforcedType(): void
+    final public function testShouldFailOnCurrentInvalidType(): void
     {
-        $this->expectException(DomainException::class);
+        $this->expectException(TypeError::class);
 
         $invalid = new class implements JsonSerializable {
             public function jsonSerialize(): array
@@ -43,6 +41,7 @@ class TypedCollectionTest extends TestCase
                 return [];
             }
         };
-        TypedCollectionTestMock::createFrom([$invalid]);
+        $collection = TypedCollectionTestMock::createFrom([$invalid]);
+        $collection->current();
     }
 }

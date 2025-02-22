@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Support\Mapping;
+namespace App\Infrastructure\Support\Adapter\Mapping;
 
-use App\Infrastructure\Support\Inputting\Values;
+use App\Domain\Support\Values;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -15,19 +15,6 @@ use function gettype;
 
 abstract class MapperEngine
 {
-    protected function isValidType(mixed $value, string $expected): bool
-    {
-        $type = gettype($value);
-        $actual = match ($type) {
-            'double' => 'float',
-            'integer' => 'int',
-            'boolean' => 'bool',
-            default => $type,
-        };
-
-        return $actual === $expected || ($type === 'object' && $value instanceof $expected);
-    }
-
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
@@ -68,10 +55,7 @@ abstract class MapperEngine
     protected function validateArgsParameterType(ReflectionParameter $parameter, mixed $value): void
     {
         $type = $parameter->getType();
-        if (! $type instanceof ReflectionNamedType) {
-            return;
-        }
-        if ($this->isValidType($value, $type->getName())) {
+        if (! ($type instanceof ReflectionNamedType) || $this->isValidType($value, $type->getName())) {
             return;
         }
         throw new InvalidArgumentException('invalid');
@@ -115,6 +99,19 @@ abstract class MapperEngine
         }
         $parameter = $parameters[0];
         $field = $parameter->getName();
-        return new Values([$field => $value]);
+        return Values::createFrom([$field => $value]);
+    }
+
+    private function isValidType(mixed $value, string $expected): bool
+    {
+        $type = gettype($value);
+        $actual = match ($type) {
+            'double' => 'float',
+            'integer' => 'int',
+            'boolean' => 'bool',
+            default => $type,
+        };
+
+        return $actual === $expected || ($type === 'object' && $value instanceof $expected);
     }
 }

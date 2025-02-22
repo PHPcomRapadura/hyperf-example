@@ -7,14 +7,22 @@ namespace Tests\Integration\Presentation\Action;
 use App\Domain\Exception\GameNotFoundException;
 use App\Presentation\Action\GetGameBySlugAction;
 use App\Presentation\Input\GetGameBySlugInput;
-use Tests\TestCase;
+use Tests\Integration\IntegrationTestCase;
 
-class GetGameBySlugActionTest extends TestCase
+class GetGameBySlugActionTest extends IntegrationTestCase
 {
-    public function testGetGameBySlugReturnsGameWhenSlugMatches(): void
+    protected array $truncate = ['games' => 'sleek'];
+
+    final public function testGetGameBySlugReturnsGameWhenSlugMatches(): void
     {
         $slug = 'cool-game-1';
         $expected = 'Cool game 1';
+        $data = [
+            'name' => $expected,
+            'slug' => 'cool-game-1',
+            'data' => ['key' => 'value'],
+        ];
+        $this->sleek->seed('games', $data);
 
         $input = $this->input(class: GetGameBySlugInput::class, params: ['slug' => $slug]);
 
@@ -24,7 +32,7 @@ class GetGameBySlugActionTest extends TestCase
         $this->assertSame($expected, $actual->name);
     }
 
-    public function testGetGameBySlugThrowsExceptionWhenSlugNotFound(): void
+    final public function testGetGameBySlugThrowsExceptionWhenSlugNotFound(): void
     {
         $this->expectException(GameNotFoundException::class);
 

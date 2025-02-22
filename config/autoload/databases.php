@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use SleekDB\Query;
+
 use function Hyperf\Support\env;
 use function Util\Type\Cast\toFloat;
 
@@ -84,6 +86,19 @@ $connections = [
             PDO::ATTR_STRINGIFY_FETCHES => false,
             PDO::ATTR_EMULATE_PREPARES => false,
         ],
+    ],
+    'sleek' => [
+        'auto_cache' => true,
+        'cache_lifetime' => null,
+        'timeout' => false,
+        'primary_key' => '_id',
+        'search' => [
+            'min_length' => 2,
+            'mode' => 'or',
+            'score_key' => 'scoreKey',
+            'algorithm' => Query::SEARCH_ALGORITHM['hits'],
+        ],
+        'folder_permissions' => 0777,
     ],
 ];
 

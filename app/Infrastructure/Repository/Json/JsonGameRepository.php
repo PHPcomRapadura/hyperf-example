@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repository\Json;
 
 use App\Domain\Collection\GameCollection;
+use App\Domain\Contract\Serializer;
 use App\Domain\Entity\Game;
 use App\Domain\Repository\GameRepository;
-use App\Infrastructure\Support\Persistence\SleekDBFactory;
+use App\Infrastructure\Support\Persistence\SleekDBDatabaseFactory;
+use App\Infrastructure\Support\Persistence\SleekDBSerializerFactory;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use SleekDB\Exceptions\IdNotAllowedException;
 use SleekDB\Exceptions\InvalidArgumentException;
 use SleekDB\Exceptions\InvalidConfigurationException;
@@ -19,15 +23,21 @@ class JsonGameRepository implements GameRepository
 {
     private Store $database;
 
+    private Serializer $serializer;
+
     /**
-     * @throws InvalidConfigurationException
      * @throws IOException
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct(
-        SleekDBFactory $sleekDBFactory
+        SleekDBDatabaseFactory $databaseFactory,
+        SleekDBSerializerFactory $serializableFactory,
     ) {
-        $this->database = $sleekDBFactory->createFrom('games');
+        $this->database = $databaseFactory->createFrom('games');
+        $this->serializer = $serializableFactory->createFrom(Game::class);
     }
 
     /**
@@ -38,11 +48,7 @@ class JsonGameRepository implements GameRepository
      */
     public function persist(Game $game): void
     {
-        $this->database->insert([
-            'name' => $game->name,
-            'slug' => $game->slug,
-            'data' => $game->data,
-        ]);
+        $this->database->insert($this->serializer->out($game));
     }
 
     /**
@@ -51,6 +57,6 @@ class JsonGameRepository implements GameRepository
      */
     public function getGames(): GameCollection
     {
-        return GameCollection::createFrom($this->database->findAll());
+        return GameCollection::createFrom($this->database->findAll(), $this->serializer);
     }
 }

@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\Presentation\Support;
 
 use App\Domain\Exception\MappingException;
-use App\Infrastructure\Support\Inputting\Values;
-use App\Presentation\Support\Mapping\Mapper;
-use App\Presentation\Support\Mapping\MapperError;
+use App\Domain\Exception\MappingExceptionItem;
+use App\Domain\Support\Values;
+use App\Infrastructure\Support\Adapter\Mapping\Mapper;
 use DateTime;
-use Ds\Map;
 use Tests\TestCase;
 
 class MapperTest extends TestCase
@@ -34,7 +33,7 @@ class MapperTest extends TestCase
             'nested' => new MapperTestStubWithNoConstructor(),
         ];
 
-        $entity = $this->mapper->map($entityClass, new Values($values));
+        $entity = $this->mapper->map($entityClass, Values::createFrom($values));
 
         $this->assertInstanceOf($entityClass, $entity);
         $this->assertSame(1, $entity->id);
@@ -57,7 +56,7 @@ class MapperTest extends TestCase
             'createdAt' => '1981-08-13T00:00:00+00:00',
         ];
 
-        $entity = $this->mapper->map($entityClass, new Values($values));
+        $entity = $this->mapper->map($entityClass, Values::createFrom($values));
 
         $this->assertInstanceOf($entityClass, $entity);
         $this->assertSame(1, $entity->id);
@@ -81,10 +80,10 @@ class MapperTest extends TestCase
         ];
 
         try {
-            $this->mapper->map($entityClass, new Values($values));
+            $this->mapper->map($entityClass, Values::createFrom($values));
         } catch (MappingException $e) {
             $errors = $e->getErrors();
-            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
+            $this->assertContainsOnlyInstancesOf(MappingExceptionItem::class, $errors);
             $messages = [
                 "The value for 'id' is not of the expected type.",
                 "The value for 'price' is required and was not provided.",
@@ -104,7 +103,7 @@ class MapperTest extends TestCase
         $entityClass = MapperTestStubWithNoConstructor::class;
         $values = [];
 
-        $entity = $this->mapper->map($entityClass, new Values($values));
+        $entity = $this->mapper->map($entityClass, Values::createFrom($values));
 
         $this->assertInstanceOf($entityClass, $entity);
     }
@@ -121,10 +120,10 @@ class MapperTest extends TestCase
         ];
 
         try {
-            $this->mapper->map($entityClass, new Values($values));
+            $this->mapper->map($entityClass, Values::createFrom($values));
         } catch (MappingException $e) {
             $errors = $e->getErrors();
-            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
+            $this->assertContainsOnlyInstancesOf(MappingExceptionItem::class, $errors);
             $this->assertTrue($this->hasErrorMessage($errors, 'Class "NonExistentClass" does not exist'));
         }
     }

@@ -6,15 +6,15 @@ namespace Tests\Unit\Domain\Collection\Support;
 
 use App\Domain\Collection\Support\TypedCollection;
 
-class TypedCollectionTestMock extends TypedCollection
+final class TypedCollectionTestMock extends TypedCollection
 {
     public function current(): TypedCollectionTestMockStub
     {
-        return $this->enforce($this->datum());
+        return $this->datum();
     }
 
-    protected function enforce(mixed $datum): TypedCollectionTestMockStub
+    protected function type(): string
     {
-        return ($datum instanceof TypedCollectionTestMockStub) ? $datum : throw $this->fail(TypedCollectionTestMockStub::class, $datum);
+        return TypedCollectionTestMockStub::class;
     }
 }

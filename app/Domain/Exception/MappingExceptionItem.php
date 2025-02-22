@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presentation\Support\Mapping;
+namespace App\Domain\Exception;
 
-class MapperError
+class MappingExceptionItem
 {
     public readonly string $message;
 

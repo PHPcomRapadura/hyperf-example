@@ -6,8 +6,8 @@ namespace App\Presentation\Action;
 
 use App\Domain\Entity\Game;
 use App\Domain\Repository\GameRepository;
+use App\Infrastructure\Support\Adapter\Mapping\Mapper;
 use App\Presentation\Input\CreateGameInput;
-use App\Presentation\Support\Mapping\Mapper;
 
 readonly class CreateGameAction
 {

@@ -4,30 +4,26 @@ declare(strict_types=1);
 
 namespace App\Domain\Exception;
 
-use App\Infrastructure\Support\Inputting\Values;
-use App\Presentation\Support\Mapping\MapperError;
+use App\Domain\Support\Values;
 use InvalidArgumentException;
 
 class MappingException extends InvalidArgumentException
 {
     /**
      * @param Values $values
-     * @param array<MapperError> $errors
+     * @param array<MappingExceptionItem> $errors
      */
     public function __construct(
-        private readonly Values $values,
+        public readonly Values $values,
         private readonly array $errors,
     ) {
-        parent::__construct(sprintf(
-            'Mapping failed with %d error(s). The errors are: "%s"',
-            count($errors),
-            implode('", "', $this->merge($errors)),
-        ));
-    }
-
-    public function getValues(): Values
-    {
-        return $this->values;
+        parent::__construct(
+            sprintf(
+                'Mapping failed with %d error(s). The errors are: "%s"',
+                count($errors),
+                implode('", "', $this->merge($errors)),
+            )
+        );
     }
 
     public function getErrors(): array
@@ -36,11 +32,11 @@ class MappingException extends InvalidArgumentException
     }
 
     /**
-     * @param array<MapperError> $errors
+     * @param array<MappingExceptionItem> $errors
      * @return array|string[]
      */
     private function merge(array $errors): array
     {
-        return array_map(fn (MapperError $error) => $error->message, $errors);
+        return array_map(fn (MappingExceptionItem $error) => $error->message, $errors);
     }
 }

@@ -95,7 +95,7 @@
     </rule>
     <rule ref="rulesets/naming.xml/ShortMethodName">
         <properties>
-            <property name="exceptions" value="at"/>
+            <property name="exceptions" value="at,in"/>
         </properties>
     </rule>
 </ruleset>
