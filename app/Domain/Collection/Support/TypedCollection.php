@@ -7,6 +7,10 @@ namespace App\Domain\Collection\Support;
 use App\Domain\Contract\Serializer;
 use DomainException;
 
+/**
+ * @template T
+ * @extends Collection<T>
+ */
 abstract class TypedCollection extends Collection
 {
     final private function __construct()
@@ -14,6 +18,11 @@ abstract class TypedCollection extends Collection
         parent::__construct([]);
     }
 
+    /**
+     * @param array $data
+     * @param Serializer|null $serializable
+     * @return TypedCollection<T>
+     */
     final public static function createFrom(array $data, ?Serializer $serializable = null): static
     {
         $collection = new static();
@@ -33,10 +42,10 @@ abstract class TypedCollection extends Collection
     }
 
     /**
-     * @template T of object
-     * @param class-string<T> $type
+     * @template U of object
+     * @param class-string<U> $type
      * @param mixed $datum
-     * @return T
+     * @return U
      */
     final protected function validate(string $type, mixed $datum): mixed
     {

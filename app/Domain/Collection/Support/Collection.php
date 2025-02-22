@@ -10,7 +10,8 @@ use Countable;
 use Iterator;
 
 /**
- * @template-implements Iterator<mixed>
+ * @template T
+ * @template-implements Iterator<T>
  */
 abstract class Collection extends Outputable implements Iterator, Countable
 {

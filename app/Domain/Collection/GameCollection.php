@@ -7,6 +7,9 @@ namespace App\Domain\Collection;
 use App\Domain\Collection\Support\TypedCollection;
 use App\Domain\Entity\Game;
 
+/**
+ * @extends TypedCollection<Game>
+ */
 final class GameCollection extends TypedCollection
 {
     public function current(): Game
