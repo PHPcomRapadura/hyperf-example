@@ -25,6 +25,6 @@ class RecoverGameService
                 return $game;
             }
         }
-        return throw new GameNotFoundException();
+        throw new GameNotFoundException();
     }
 }

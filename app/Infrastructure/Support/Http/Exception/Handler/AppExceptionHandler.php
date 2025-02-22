@@ -12,9 +12,17 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+use function Util\Type\Cast\toInt;
+use function Util\Type\Cast\toString;
+
 class AppExceptionHandler extends ExceptionHandler
 {
     use OutputFormatter;
+
+    /**
+     * @var array<string>
+     */
+    private array $ignored = [];
 
     public function __construct(private readonly LoggerInterface $logger)
     {
@@ -47,14 +55,19 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function isValid(Throwable $throwable): bool
     {
+        foreach ($this->ignored as $item) {
+            if (toString($item) === $throwable::class) {
+                return false;
+            }
+        }
         return true;
     }
 
     private function extractCode(Throwable $throwable): int
     {
         $code = $throwable->getCode();
-        if ($code >= 400 && $code < 500) {
-            return $code;
+        if ($code >= 400 && $code < 600) {
+            return toInt($code);
         }
         return 500;
     }

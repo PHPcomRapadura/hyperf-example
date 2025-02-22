@@ -9,6 +9,9 @@ use Closure;
 use Countable;
 use Iterator;
 
+/**
+ * @template-implements Iterator<mixed>
+ */
 abstract class Collection extends Outputable implements Iterator, Countable
 {
     private int $cursor = 0;

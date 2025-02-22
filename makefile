@@ -47,6 +47,9 @@ lint-phpmd: ## Perform code style list using phpmd
 lint-rector: ## Perform code style list using rector
 	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:rector
 
+lint-psalm: ## Perform code style list using psalm
+	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app lint:psalm
+
 fix: ## Perform code style fix
 	@$(COMPOSE_RUNNER) run --rm --entrypoint composer app fix
 

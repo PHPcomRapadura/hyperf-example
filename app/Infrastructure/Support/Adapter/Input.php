@@ -46,7 +46,7 @@ abstract class Input extends FormRequest
      */
     public function post(?string $key = null, mixed $default = null): mixed
     {
-        if (! $key) {
+        if ($key === null) {
             return $this->values()->copy();
         }
         return $this->value($key, $default);
