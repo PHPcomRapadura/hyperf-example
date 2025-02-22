@@ -13,7 +13,7 @@ class CreateGameInput extends ActionInput
         return [
             'name' => ['required', 'string'],
             'slug' => ['required', 'string'],
-            'data' => ['optional:[]', 'array'],
+            'data' => ['sometimes', 'array'],
         ];
     }
 }

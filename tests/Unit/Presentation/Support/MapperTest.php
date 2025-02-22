@@ -8,6 +8,7 @@ use App\Domain\Exception\MappingException;
 use App\Presentation\Support\Mapping\Mapper;
 use App\Presentation\Support\Mapping\MapperError;
 use DateTime;
+use Google\Type\Date;
 use Tests\TestCase;
 
 class MapperTest extends TestCase
@@ -20,7 +21,7 @@ class MapperTest extends TestCase
         $this->mapper = new Mapper();
     }
 
-    final public function testToEntityWithValidValues(): void
+    final public function testMapWithValidValues(): void
     {
         $entityClass = MapperTestStubWithConstructor::class;
         $values = [
@@ -43,7 +44,7 @@ class MapperTest extends TestCase
         $this->assertNull($entity->createdAt);
     }
 
-    final public function testToEntityWithMissingOptionalValue(): void
+    final public function testMapWithMissingOptionalValue(): void
     {
         $entityClass = MapperTestStubWithConstructor::class;
         $values = [
@@ -52,6 +53,7 @@ class MapperTest extends TestCase
             'name' => 'Test',
             'isActive' => true,
             'nested' => new MapperTestStubWithNoConstructor(),
+            'createdAt' => '1981-08-13T00:00:00+00:00',
         ];
 
         $entity = $this->mapper->map($entityClass, $values);
@@ -62,19 +64,19 @@ class MapperTest extends TestCase
         $this->assertSame('Test', $entity->name);
         $this->assertTrue($entity->isActive);
         $this->assertSame([], $entity->tags);
-        $this->assertNull($entity->createdAt);
+        $this->assertInstanceOf(DateTime::class, $entity->createdAt);
     }
 
-    final public function testToEntityWithInvalidType(): void
+    final public function testMapWithErrors(): void
     {
         $entityClass = MapperTestStubWithConstructor::class;
         $values = [
             'id' => 'invalid',
-            'price' => 19.99,
             'name' => 'Test',
             'isActive' => true,
             'tags' => ['tag1', 'tag2'],
-            'createdAt' => new MapperTestStubWithNoConstructor(),
+            'nested' => new DateTime(),
+            'no' => 'invalid',
         ];
 
         try {
@@ -83,30 +85,12 @@ class MapperTest extends TestCase
             $errors = $e->getErrors();
             $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
             $this->assertTrue($this->hasErrorMessage($errors, "The value for 'id' is not of the expected type."));
+            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'price' is required and was not provided."));
+            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'nested' is not of the expected type."));
         }
     }
 
-    final public function testToEntityWithMissingRequiredValue(): void
-    {
-        $entityClass = MapperTestStubWithConstructor::class;
-        $values = [
-            'price' => 19.99,
-            'name' => 'Test',
-            'isActive' => true,
-            'tags' => ['tag1', 'tag2'],
-            'createdAt' => new DateTime(),
-        ];
-
-        try {
-            $this->mapper->map($entityClass, $values);
-        } catch (MappingException $e) {
-            $errors = $e->getErrors();
-            $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
-            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'id' is required and was not provided."));
-        }
-    }
-
-    final public function testToEntityWithNoConstructor(): void
+    final public function testMapWithNoConstructor(): void
     {
         $entityClass = MapperTestStubWithNoConstructor::class;
         $values = [];
@@ -116,7 +100,7 @@ class MapperTest extends TestCase
         $this->assertInstanceOf($entityClass, $entity);
     }
 
-    final public function testToEntityWithReflectionError(): void
+    final public function testMapWithReflectionError(): void
     {
         $entityClass = 'NonExistentClass';
         $values = [

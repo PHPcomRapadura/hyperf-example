@@ -16,6 +16,7 @@ class MapperTestStubWithConstructor extends Entity
         public readonly bool $isActive,
         public readonly MapperTestStubWithNoConstructor $nested,
         public readonly ?DateTime $createdAt,
+        public readonly ?MapperTestStubWithNoParameters $no,
         public readonly array $tags = [],
         ?string $foo = null,
     ) {
