@@ -21,9 +21,9 @@ use SleekDB\Store;
 
 class JsonGameRepository implements GameRepository
 {
-    private Store $database;
+    private readonly Store $database;
 
-    private Serializer $serializer;
+    private readonly Serializer $serializer;
 
     /**
      * @throws IOException

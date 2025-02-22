@@ -48,6 +48,7 @@ class Mapper extends MapperEngine
     }
 
     /**
+     * @SuppressWarnings(CyclomaticComplexity)
      * @param array<ReflectionParameter> $parameters
      * @param Values $values
      * @return Values

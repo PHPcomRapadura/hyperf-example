@@ -63,6 +63,10 @@ abstract class Input extends FormRequest
         return data_get($this->values()->copy(), $key, $default);
     }
 
+    /**
+     * @SuppressWarnings(StaticAccess)
+     * @return Values
+     */
     final public function values(): Values
     {
         if (Context::has(ServerRequestInterface::class)) {
