@@ -7,6 +7,7 @@ namespace App\Presentation\Action;
 use App\Domain\Entity\Game;
 use App\Domain\Repository\GameRepository;
 use App\Infrastructure\Support\Adapter\Mapping\Mapper;
+use App\Infrastructure\Support\Presentation\Output\NoContent;
 use App\Presentation\Input\CreateGameInput;
 
 readonly class CreateGameAction
@@ -17,9 +18,10 @@ readonly class CreateGameAction
     ) {
     }
 
-    public function __invoke(CreateGameInput $input): void
+    public function __invoke(CreateGameInput $input): NoContent
     {
         $game = $this->mapper->map(Game::class, $input->values());
         $this->gameQueryRepository->persist($game);
+        return new NoContent();
     }
 }

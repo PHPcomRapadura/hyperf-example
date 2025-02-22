@@ -110,7 +110,7 @@
     "lint:deptrac": "deptrac analyse --report-uncovered --fail-on-uncovered",
     "lint:phpmd": "phpmd app ansi phpmd.xml",
     "lint:rector": "rector --dry-run",
-    "lint:psalm": "psalm --diff",
+    "lint:psalm": "psalm",
     "lint": [
       "composer lint:phpcs",
       "composer lint:phpstan",

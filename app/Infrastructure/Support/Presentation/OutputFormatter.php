@@ -8,7 +8,7 @@ use JsonException;
 
 trait OutputFormatter
 {
-    public function toPayload(int $statusCode, array $body): string
+    public function toPayload(int $statusCode, mixed $body = null): string
     {
         $parsed = $this->parse($statusCode, $body);
         try {
@@ -18,7 +18,7 @@ trait OutputFormatter
         }
     }
 
-    private function parse(int $statusCode, array $body): array
+    private function parse(int $statusCode, mixed $body): array
     {
         if ($this->isSuccess($statusCode)) {
             return [

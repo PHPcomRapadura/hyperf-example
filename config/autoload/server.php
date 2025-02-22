@@ -7,6 +7,7 @@ declare(strict_types=1);
 use Hyperf\Framework\Bootstrap\PipeMessageCallback;
 use Hyperf\Framework\Bootstrap\WorkerExitCallback;
 use Hyperf\Framework\Bootstrap\WorkerStartCallback;
+use Hyperf\HttpServer\Server as HttpServer;
 use Hyperf\Server\Event;
 use Hyperf\Server\Server;
 use Swoole\Constant;
@@ -21,7 +22,7 @@ return [
             'port' => 9501,
             'sock_type' => SWOOLE_SOCK_TCP,
             'callbacks' => [
-                Event::ON_REQUEST => [Hyperf\HttpServer\Server::class, 'onRequest'],
+                Event::ON_REQUEST => [HttpServer::class, 'onRequest'],
             ],
             'options' => [
                 // Whether to enable request lifecycle event

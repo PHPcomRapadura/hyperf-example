@@ -42,7 +42,7 @@ parameters:
             - type: className
               regex:
                 ^Psr\\(Http|Log|Container)\\.*|\
-                ^Hyperf\\(Event|Command|Coordinator|HttpMessage|Context|ExceptionHandler)\\.*|\
+                ^Hyperf\\(Event|Command|Coordinator|HttpMessage|HttpServer|Context|ExceptionHandler)\\.*|\
                 ^Google\\.*|\
                 ^SleekDB\\.*|\
                 ^Swow\\.*
