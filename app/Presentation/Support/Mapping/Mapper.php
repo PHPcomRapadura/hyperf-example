@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Support\Mapping;
 
 use App\Domain\Exception\MappingException;
+use App\Infrastructure\Support\Inputting\Values;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -14,14 +15,14 @@ use Throwable;
 class Mapper extends MapperEngine
 {
     /**
-     * @template T of mixed
+     * @template T of object
      * @param class-string<T> $class
-     * @param array<string, mixed> $values
+     * @param Values $values
      *
      * @return T
      * @throws MappingException
      */
-    public function map(string $class, array $values): mixed
+    public function map(string $class, Values $values): mixed
     {
         try {
             $reflectionClass = new ReflectionClass($class);
@@ -31,9 +32,9 @@ class Mapper extends MapperEngine
                 return new $class();
             }
 
-            $parameters = $constructor->getParameters() ?? [];
-            $data = $this->resolveData($parameters, $values);
-            $args = $this->resolveArgs($parameters, $data);
+            $parameters = $constructor->getParameters();
+            $values = $this->resolveData($parameters, $values);
+            $args = $this->resolveArgs($parameters, $values);
             return $reflectionClass->newInstanceArgs($args);
         } catch (MappingException $e) {
             throw $e;
@@ -47,19 +48,19 @@ class Mapper extends MapperEngine
 
     /**
      * @param array<ReflectionParameter> $parameters
-     * @param array<string, mixed> $values
-     * @return array<string, mixed>
+     * @param Values $values
+     * @return Values
      * @throws ReflectionException
      */
-    private function resolveData(array $parameters, array $values): array
+    private function resolveData(array $parameters, Values $values): Values
     {
         foreach ($parameters as $parameter) {
             $field = $parameter->getName();
-            if (! array_key_exists($field, $values)) {
+            if (! $values->has($field)) {
                 continue;
             }
 
-            $value = $values[$field] ?? null;
+            $value = $values->get($field);
             $parameterClass = $this->resolveDataParameterClass($parameter, $value);
             if ($parameterClass === null) {
                 continue;
@@ -69,7 +70,7 @@ class Mapper extends MapperEngine
             if ($parameterValues === null) {
                 continue;
             }
-            $values[$field] = $this->map($parameterClass, $parameterValues);
+            $values = $values->with($field, $this->map($parameterClass, $parameterValues));
         }
 
         return $values;
@@ -77,21 +78,21 @@ class Mapper extends MapperEngine
 
     /**
      * @param array<ReflectionParameter> $parameters
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
+     * @param Values $values
+     * @return array
      * @throws ReflectionException
      */
-    private function resolveArgs(array $parameters, array $data): array
+    private function resolveArgs(array $parameters, Values $values): array
     {
         $errors = [];
         $args = [];
         foreach ($parameters as $parameter) {
             try {
-                $args[] = $this->resolveArgsParameter($parameter, $data);
+                $args[] = $this->resolveArgsParameter($parameter, $values);
             } catch (InvalidArgumentException $e) {
                 $errors[] = new MapperError(
                     $e->getMessage(),
-                    $data[$parameter->getName()] ?? null,
+                    $values->get($parameter->getName()),
                     $parameter->getName(),
                 );
             }
@@ -99,6 +100,6 @@ class Mapper extends MapperEngine
         if (empty($errors)) {
             return $args;
         }
-        throw new MappingException($data, $errors);
+        throw new MappingException($values, $errors);
     }
 }

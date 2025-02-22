@@ -6,6 +6,7 @@ parameters:
     - config
     - app
   reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: false
   ignoreErrors:
     - '#Static call to instance method Hyperf\\HttpServer\\Router\\Router::[a-zA-Z0-9\\_]+\(\)#'
     - '#Static call to instance method Hyperf\\DbConnection\\Db::[a-zA-Z0-9\\_]+\(\)#'
@@ -16,7 +17,5 @@ parameters:
     - '#is not subtype of native type static#'
     - '#Unsafe usage of new static#'
     - identifier: missingType.generics
-#  excludePaths:
-#    - config/functions.php
 includes:
   - vendor/bnf/phpstan-psr-container/extension.neon

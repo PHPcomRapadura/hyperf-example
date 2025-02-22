@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Support\Mapping;
 
+use App\Infrastructure\Support\Inputting\Values;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 use function gettype;
@@ -28,16 +30,17 @@ abstract class MapperEngine
 
     /**
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
-    protected function resolveArgsParameter(ReflectionParameter $parameter, array $values): mixed
+    protected function resolveArgsParameter(ReflectionParameter $parameter, Values $values): mixed
     {
         $name = $parameter->getName();
 
-        if (! array_key_exists($name, $values)) {
+        if (! $values->has($name)) {
             return $this->handleArgsMissingParameter($parameter);
         }
 
-        $value = $values[$name];
+        $value = $values->get($name);
         $this->validateArgsParameterType($parameter, $value);
 
         return $value;
@@ -45,6 +48,7 @@ abstract class MapperEngine
 
     /**
      * @throws ReflectionException
+     * @throws InvalidArgumentException
      */
     protected function handleArgsMissingParameter(ReflectionParameter $parameter): mixed
     {
@@ -58,44 +62,59 @@ abstract class MapperEngine
         throw new InvalidArgumentException('required');
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function validateArgsParameterType(ReflectionParameter $parameter, mixed $value): void
     {
         $type = $parameter->getType();
-        if ($type === null || $this->isValidType($value, $type->getName())) {
+        if (! $type instanceof ReflectionNamedType) {
+            return;
+        }
+        if ($this->isValidType($value, $type->getName())) {
             return;
         }
         throw new InvalidArgumentException('invalid');
     }
 
+    /**
+     * @param ReflectionParameter $parameter
+     * @param mixed $value
+     * @return null|class-string<object>
+     */
     protected function resolveDataParameterClass(ReflectionParameter $parameter, mixed $value): ?string
     {
         $type = $parameter->getType();
-        if ($type === null || ! class_exists($type->getName())) {
+        if (! $type instanceof ReflectionNamedType) {
             return null;
         }
         $class = $type->getName();
-        if ($this->isValidType($value, $class)) {
+        if (! class_exists($class) || $this->isValidType($value, $class)) {
             return null;
         }
         return $class;
     }
 
     /**
+     * @template T of object
+     * @param class-string<T> $type
+     * @param mixed $value
+     * @return null|Values
      * @throws ReflectionException
      */
-    protected function resolveDataParameterValues(string $type, mixed $value): ?array
+    protected function resolveDataParameterValues(string $type, mixed $value): ?Values
     {
         $reflectionClass = new ReflectionClass($type);
         $constructor = $reflectionClass->getConstructor();
         if ($constructor === null) {
             return null;
         }
-        $parameters = $constructor->getParameters() ?? [];
+        $parameters = $constructor->getParameters();
         if (empty($parameters)) {
             return null;
         }
         $parameter = $parameters[0];
         $field = $parameter->getName();
-        return [$field => $value];
+        return new Values([$field => $value]);
     }
 }

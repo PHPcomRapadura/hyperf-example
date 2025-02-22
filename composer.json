@@ -13,6 +13,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.3",
+    "ext-ds": "*",
     "ext-json": "*",
     "ext-pdo": "*",
     "ext-swoole": "^6.0",
@@ -47,6 +48,7 @@
     "hyperf/tracer": "~3.1.0",
     "hyperf/validation": "^3.1",
     "monolog/monolog": "^3.8",
+    "php-ds/php-ds": "^1.5",
     "rakibtg/sleekdb": "^2.15",
     "swow/psr7-plus": "^1.1"
   },

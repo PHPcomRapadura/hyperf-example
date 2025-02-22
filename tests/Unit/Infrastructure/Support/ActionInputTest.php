@@ -10,14 +10,14 @@ class ActionInputTest extends TestCase
 {
     final public function testShouldAuthorize(): void
     {
-        $input = $this->make(ActionInputTestStub::class);
+        $input = $this->make(InputTestStub::class);
 
         $this->assertTrue($input->authorize());
     }
 
     final public function testRules(): void
     {
-        $input = $this->make(ActionInputTestStub::class);
+        $input = $this->make(InputTestStub::class);
         $rules = $input->rules();
 
         $this->assertArrayHasKey('test', $rules);
@@ -28,7 +28,7 @@ class ActionInputTest extends TestCase
     {
         $data = ['datum' => 'cool'];
 
-        $input = $this->input(class: ActionInputTestStub::class, data: $data);
+        $input = $this->input(class: InputTestStub::class, data: $data);
 
         $this->assertEquals('cool', $input->value('datum'));
     }
@@ -37,26 +37,26 @@ class ActionInputTest extends TestCase
     {
         $params = ['param' => 'cool'];
 
-        $input = $this->input(class: ActionInputTestStub::class, params: $params);
+        $input = $this->input(class: InputTestStub::class, params: $params);
 
         $this->assertEquals('cool', $input->value('param'));
     }
 
     final public function testShouldCallValueBehindPost(): void
     {
-        $input = $this->make(ActionInputTestStub::class, ['values' => ['test' => 'cool']]);
+        $input = $this->make(InputTestStub::class, ['values' => ['test' => 'cool']]);
         $this->assertEquals('cool', $input->post('test'));
     }
 
     final public function testShouldCallValuesBehindPost(): void
     {
-        $input = $this->make(ActionInputTestStub::class, ['values' => ['test' => 'cool']]);
+        $input = $this->make(InputTestStub::class, ['values' => ['test' => 'cool']]);
         $this->assertEquals(['test' => 'cool'], $input->post());
     }
 
     final public function testShouldCallValueBehindInput(): void
     {
-        $input = $this->make(ActionInputTestStub::class, ['values' => ['test' => 'cool']]);
+        $input = $this->make(InputTestStub::class, ['values' => ['test' => 'cool']]);
         $this->assertEquals('cool', $input->input('test'));
     }
 }

@@ -23,7 +23,7 @@ class SleekDBFactory
         $configuration = [
             'auto_cache' => true,
             'cache_lifetime' => null,
-            'timeout' => null,
+            'timeout' => false,
             'primary_key' => '_id',
             'search' => [
                 'min_length' => 2,

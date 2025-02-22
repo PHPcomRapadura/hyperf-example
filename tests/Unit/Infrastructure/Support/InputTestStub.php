@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Infrastructure\Support;
 
-use App\Infrastructure\Support\Presentation\ActionInput;
+use App\Infrastructure\Support\Inputting\Input;
 
-class ActionInputTestStub extends ActionInput
+class InputTestStub extends Input
 {
     public function rules(): array
     {

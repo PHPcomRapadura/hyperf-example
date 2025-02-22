@@ -5,6 +5,8 @@ TIMEZONE=${1:-UTC}
 
 git config --global --add safe.directory /opt/www
 
+apk add php83-pecl-ds
+
 # - config PHP
 cd /etc/php*
 {

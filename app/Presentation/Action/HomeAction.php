@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Action;
 
-use App\Presentation\Input\HomeActionInput;
+use App\Presentation\Input\HomeInput;
 
 readonly class HomeAction
 {
-    public function __invoke(HomeActionInput $input): array
+    public function __invoke(HomeInput $input): array
     {
         return [
             'method' => $input->getMethod(),

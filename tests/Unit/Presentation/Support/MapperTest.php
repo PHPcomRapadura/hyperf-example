@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tests\Unit\Presentation\Support;
 
 use App\Domain\Exception\MappingException;
+use App\Infrastructure\Support\Inputting\Values;
 use App\Presentation\Support\Mapping\Mapper;
 use App\Presentation\Support\Mapping\MapperError;
 use DateTime;
-use Google\Type\Date;
+use Ds\Map;
 use Tests\TestCase;
 
 class MapperTest extends TestCase
@@ -33,7 +34,7 @@ class MapperTest extends TestCase
             'nested' => new MapperTestStubWithNoConstructor(),
         ];
 
-        $entity = $this->mapper->map($entityClass, $values);
+        $entity = $this->mapper->map($entityClass, new Values($values));
 
         $this->assertInstanceOf($entityClass, $entity);
         $this->assertSame(1, $entity->id);
@@ -56,7 +57,7 @@ class MapperTest extends TestCase
             'createdAt' => '1981-08-13T00:00:00+00:00',
         ];
 
-        $entity = $this->mapper->map($entityClass, $values);
+        $entity = $this->mapper->map($entityClass, new Values($values));
 
         $this->assertInstanceOf($entityClass, $entity);
         $this->assertSame(1, $entity->id);
@@ -80,13 +81,21 @@ class MapperTest extends TestCase
         ];
 
         try {
-            $this->mapper->map($entityClass, $values);
+            $this->mapper->map($entityClass, new Values($values));
         } catch (MappingException $e) {
             $errors = $e->getErrors();
             $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);
-            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'id' is not of the expected type."));
-            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'price' is required and was not provided."));
-            $this->assertTrue($this->hasErrorMessage($errors, "The value for 'nested' is not of the expected type."));
+            $messages = [
+                "The value for 'id' is not of the expected type.",
+                "The value for 'price' is required and was not provided.",
+                "The value for 'nested' is not of the expected type.",
+            ];
+            foreach ($messages as $message) {
+                if ($this->hasErrorMessage($errors, $message)) {
+                    continue;
+                }
+                $this->fail(sprintf('Error message "%s" not found', $message));
+            }
         }
     }
 
@@ -95,7 +104,7 @@ class MapperTest extends TestCase
         $entityClass = MapperTestStubWithNoConstructor::class;
         $values = [];
 
-        $entity = $this->mapper->map($entityClass, $values);
+        $entity = $this->mapper->map($entityClass, new Values($values));
 
         $this->assertInstanceOf($entityClass, $entity);
     }
@@ -112,7 +121,7 @@ class MapperTest extends TestCase
         ];
 
         try {
-            $this->mapper->map($entityClass, $values);
+            $this->mapper->map($entityClass, new Values($values));
         } catch (MappingException $e) {
             $errors = $e->getErrors();
             $this->assertContainsOnlyInstancesOf(MapperError::class, $errors);

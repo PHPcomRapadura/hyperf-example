@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Support\Presentation;
+namespace App\Infrastructure\Support\Inputting;
 
 use Hyperf\Validation\Request\FormRequest;
 use Psr\Container\ContainerInterface;
@@ -12,7 +12,7 @@ use function Hyperf\Collection\data_get;
 /**
  * @see https://hyperf.wiki/3.1/#/en/validation?id=form-request-validation
  */
-abstract class ActionInput extends FormRequest
+abstract class Input extends FormRequest
 {
     public function __construct(
         ContainerInterface $container,
