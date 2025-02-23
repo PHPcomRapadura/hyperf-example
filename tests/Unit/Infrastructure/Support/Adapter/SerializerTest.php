@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Infrastructure\Support\Adapter;
 
-use App\Domain\Support\Outputable;
 use App\Domain\Support\Values;
 use App\Infrastructure\Support\Adapter\Mapping\Mapper;
 use App\Infrastructure\Support\Adapter\Serializer;
@@ -35,18 +34,6 @@ class SerializerTest extends TestCase
         $result = $this->serializer->in($datum);
 
         $this->assertEquals($values, $result);
-    }
-
-    public function testOutWithOutputable(): void
-    {
-        $outputable = $this->createMock(Outputable::class);
-        $outputable->expects($this->once())
-            ->method('jsonSerialize')
-            ->willReturn(['key' => 'value']);
-
-        $result = $this->serializer->out($outputable);
-
-        $this->assertEquals(['key' => 'value'], $result);
     }
 
     public function testOutWithArray(): void

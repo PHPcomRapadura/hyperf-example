@@ -9,6 +9,10 @@ use Hyperf\Contract\Jsonable;
 use JsonException;
 use JsonSerializable;
 
+use function get_object_vars;
+use function json_encode;
+use function sprintf;
+
 abstract class Outputable implements Result, JsonSerializable, Jsonable
 {
     public function properties(): Values

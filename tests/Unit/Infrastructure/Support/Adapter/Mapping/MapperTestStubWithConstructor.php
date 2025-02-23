@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Presentation\Support;
+namespace Tests\Unit\Infrastructure\Support\Adapter\Mapping;
 
 use App\Domain\Entity\Support\Entity;
 use DateTime;
@@ -14,7 +14,7 @@ class MapperTestStubWithConstructor extends Entity
         public readonly float $price,
         public readonly string $name,
         public readonly bool $isActive,
-        public readonly MapperTestStubWithNoConstructor $nested,
+        public readonly MapperTestStubWithNoConstructor $more,
         public readonly ?DateTime $createdAt,
         public readonly ?MapperTestStubWithNoParameters $no,
         public readonly array $tags = [],

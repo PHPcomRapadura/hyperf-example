@@ -55,20 +55,12 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function isValid(Throwable $throwable): bool
     {
-        foreach ($this->ignored as $item) {
-            if (toString($item) === $throwable::class) {
-                return false;
-            }
-        }
-        return true;
+        $haystack = array_map(fn (mixed $candidate) => toString($candidate), $this->ignored);
+        return ! in_array($throwable::class, $haystack, true);
     }
 
     private function extractCode(Throwable $throwable): int
     {
-        $code = $throwable->getCode();
-        if ($code >= 400 && $code < 600) {
-            return toInt($code);
-        }
-        return 500;
+        return ($code = $throwable->getCode()) >= 400 && $code < 600 ? toInt($code) : 500;
     }
 }

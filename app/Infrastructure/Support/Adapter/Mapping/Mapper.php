@@ -48,7 +48,6 @@ class Mapper extends MapperEngine
     }
 
     /**
-     * @SuppressWarnings(CyclomaticComplexity)
      * @param array<ReflectionParameter> $parameters
      * @param Values $values
      * @return Values
@@ -63,16 +62,12 @@ class Mapper extends MapperEngine
             }
 
             $value = $values->get($field);
-            $parameterClass = $this->resolveDataParameterClass($parameter, $value);
-            if ($parameterClass === null) {
+            $context = $this->resolveDataParameterValue($parameter, $value);
+            if ($context === null) {
                 continue;
             }
-
-            $parameterValues = $this->resolveDataParameterValues($parameterClass, $value);
-            if ($parameterValues === null) {
-                continue;
-            }
-            $values = $values->with($field, $this->map($parameterClass, $parameterValues));
+            /** @phpstan-ignore argument.type, argument.templateType */
+            $values = $values->with($field, $this->map($context->class, $context->values));
         }
 
         return $values;

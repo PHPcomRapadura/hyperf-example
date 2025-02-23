@@ -6,6 +6,13 @@ namespace App\Domain\Support;
 
 use InvalidArgumentException;
 
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function is_array;
+use function is_object;
+use function is_string;
+
 final readonly class Values
 {
     /**

@@ -57,7 +57,7 @@ class AppExceptionHandlerTest extends TestCase
         $this->assertJson((string) $result->getBody());
     }
 
-    public function testIsValidShouldAlwaysReturnTrue(): void
+    public function testIsValidShouldAlwaysReturnIfExceptionIsNotIgnored(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $handler = new AppExceptionHandler($logger);

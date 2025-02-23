@@ -77,4 +77,36 @@ class OutputableTest extends TestCase
 
         $this->assertStringContainsString('{"error":', $result);
     }
+
+    final public function testContentReturnsValues(): void
+    {
+        $entity = new class extends Outputable {
+            public string $property1 = 'value1';
+
+            public int $property2 = 123;
+        };
+
+        $expected = [
+            'property1' => 'value1',
+            'property2' => 123,
+        ];
+
+        $this->assertEquals($expected, $entity->content()->copy());
+    }
+
+    final public function testContentWithEmptyOutputable(): void
+    {
+        $entity = new class extends Outputable {
+        };
+
+        $this->assertNull($entity->content());
+    }
+
+    final public function testPropertiesReturnsEmpty(): void
+    {
+        $entity = new class extends Outputable {
+        };
+
+        $this->assertEquals([], $entity->properties()->copy());
+    }
 }

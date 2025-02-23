@@ -75,7 +75,7 @@ class AppMiddleware extends Hyperf
             if (! is_string($value)) {
                 continue;
             }
-            $output = $output->withAddedHeader($key, $value);
+            $output = $output->withAddedHeader(sprintf('X-%s', $key), $value);
         }
         return $output;
     }
