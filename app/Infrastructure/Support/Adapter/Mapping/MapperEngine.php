@@ -11,6 +11,7 @@ use ReflectionException;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionType;
 use ReflectionUnionType;
 
 use function array_key_exists;
@@ -49,16 +50,7 @@ abstract class MapperEngine
     protected function resolveDataParameterClass(ReflectionParameter $parameter): ?string
     {
         $type = $parameter->getType();
-        if ($type === null) {
-            return null;
-        }
-        $classes = match ($type::class) {
-            ReflectionNamedType::class => [$type->getName()],
-            ReflectionIntersectionType::class, ReflectionUnionType::class => array_map(
-                fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type->getName(),
-                $type->getTypes()
-            ),
-        };
+        $classes = $this->extractTypes($type);
         foreach ($classes as $class) {
             if (is_string($class) && class_exists($class)) {
                 return $class;
@@ -139,13 +131,7 @@ abstract class MapperEngine
         if ($type === null) {
             return;
         }
-        $types = match ($type::class) {
-            ReflectionNamedType::class => [$type->getName()],
-            ReflectionIntersectionType::class, ReflectionUnionType::class => array_map(
-                fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type->getName(),
-                $type->getTypes()
-            ),
-        };
+        $types = $this->extractTypes($type);
         foreach ($types as $type) {
             if ($this->isValidType($value, $type)) {
                 return;
@@ -165,5 +151,23 @@ abstract class MapperEngine
         };
 
         return $actual === $expected || ($type === 'object' && $value instanceof $expected);
+    }
+
+    /**
+     * @param ?ReflectionType $type
+     * @return array<class-string<object>|string>
+     */
+    private function extractTypes(?ReflectionType $type): array
+    {
+        if ($type instanceof ReflectionNamedType) {
+            return [$type->getName()];
+        }
+        if ($type instanceof ReflectionIntersectionType || $type instanceof ReflectionUnionType) {
+            return array_map(
+                fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type->getName(),
+                $type->getTypes()
+            );
+        }
+        return [];
     }
 }
