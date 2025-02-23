@@ -7,25 +7,31 @@ declare(strict_types=1);
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Set\ValueObject\LevelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return static function (RectorConfig $config): void {
+    $config->paths([
         __DIR__ . '/app',
         __DIR__ . '/tests',
     ]);
 
     // register a single rule
-    $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
+    $config->rule(InlineConstructorDefaultToPropertyRector::class);
 
-    $rectorConfig->skip([AddOverrideAttributeToOverriddenMethodsRector::class]);
+    $config->skip([AddOverrideAttributeToOverriddenMethodsRector::class]);
+    $config->skip([
+        ClassPropertyAssignToConstructorPromotionRector::class => [
+            __DIR__ . '/tests/Unit/Infrastructure/Support/Adapter/Mapping/MapperTestStubEdgeCase.php',
+        ],
+    ]);
 
     // define sets of rules
-    $rectorConfig->sets([
+    $config->sets([
         LevelSetList::UP_TO_PHP_83,
     ]);
 
-    $rectorConfig->cacheClass(FileCacheStorage::class);
-    $rectorConfig->cacheDirectory('/tmp/rector');
+    $config->cacheClass(FileCacheStorage::class);
+    $config->cacheDirectory('/tmp/rector');
 };
