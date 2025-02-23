@@ -163,9 +163,11 @@ abstract class MapperEngine
             return [$type->getName()];
         }
         if ($type instanceof ReflectionIntersectionType || $type instanceof ReflectionUnionType) {
+            /** @var array<ReflectionNamedType> $reflectionNamedTypes */
+            $reflectionNamedTypes = $type->getTypes();
             return array_map(
                 fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type->getName(),
-                $type->getTypes()
+                $reflectionNamedTypes
             );
         }
         return [];
