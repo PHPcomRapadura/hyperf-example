@@ -8,20 +8,12 @@ use App\Domain\Support\Values;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionIntersectionType;
-use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
-use ReflectionUnionType;
 
-use function array_key_exists;
-use function array_map;
 use function class_exists;
-use function gettype;
-use function is_array;
 use function is_string;
 
-abstract class MapperEngine
+abstract class MapperEngine extends MapperEngineCommon
 {
     /**
      * @param ReflectionParameter $parameter
@@ -47,7 +39,7 @@ abstract class MapperEngine
      * @param ReflectionParameter $parameter
      * @return null|class-string<object>
      */
-    protected function resolveDataParameterClass(ReflectionParameter $parameter): ?string
+    private function resolveDataParameterClass(ReflectionParameter $parameter): ?string
     {
         $type = $parameter->getType();
         $classes = $this->extractTypes($type);
@@ -66,7 +58,7 @@ abstract class MapperEngine
      * @return null|Values
      * @throws ReflectionException
      */
-    protected function resolveDataParameterValues(string $type, mixed $value): ?Values
+    private function resolveDataParameterValues(string $type, mixed $value): ?Values
     {
         $reflectionClass = new ReflectionClass($type);
         $constructor = $reflectionClass->getConstructor();
@@ -77,15 +69,7 @@ abstract class MapperEngine
         if (empty($parameters)) {
             return null;
         }
-        $input = is_array($value) ? $value : [];
-        $values = [];
-        foreach ($parameters as $index => $parameter) {
-            $name = $parameter->getName();
-            if (array_key_exists($name, $input) || array_key_exists($index, $input)) {
-                $values[$name] = $input[$name] ?? $input[$index] ?? null;
-            }
-        }
-        return Values::createFrom($values);
+        return $this->parseParametersToValues($parameters, $value);
     }
 
     /**
@@ -110,7 +94,7 @@ abstract class MapperEngine
      * @throws ReflectionException
      * @throws InvalidArgumentException
      */
-    protected function handleArgsMissingParameter(ReflectionParameter $parameter): mixed
+    private function handleArgsMissingParameter(ReflectionParameter $parameter): mixed
     {
         if ($parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
             return $parameter->getDefaultValue();
@@ -125,7 +109,7 @@ abstract class MapperEngine
     /**
      * @throws InvalidArgumentException
      */
-    protected function validateArgsParameterType(ReflectionParameter $parameter, mixed $value): void
+    private function validateArgsParameterType(ReflectionParameter $parameter, mixed $value): void
     {
         $type = $parameter->getType();
         if ($type === null) {
@@ -138,38 +122,5 @@ abstract class MapperEngine
             }
         }
         throw new InvalidArgumentException('invalid');
-    }
-
-    private function isValidType(mixed $value, string $expected): bool
-    {
-        $type = gettype($value);
-        $actual = match ($type) {
-            'double' => 'float',
-            'integer' => 'int',
-            'boolean' => 'bool',
-            default => $type,
-        };
-
-        return $actual === $expected || ($type === 'object' && $value instanceof $expected);
-    }
-
-    /**
-     * @param ?ReflectionType $type
-     * @return array<class-string<object>|string>
-     */
-    private function extractTypes(?ReflectionType $type): array
-    {
-        if ($type instanceof ReflectionNamedType) {
-            return [$type->getName()];
-        }
-        if ($type instanceof ReflectionIntersectionType || $type instanceof ReflectionUnionType) {
-            /** @var array<ReflectionNamedType> $reflectionNamedTypes */
-            $reflectionNamedTypes = $type->getTypes();
-            return array_map(
-                fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type->getName(),
-                $reflectionNamedTypes
-            );
-        }
-        return [];
     }
 }
